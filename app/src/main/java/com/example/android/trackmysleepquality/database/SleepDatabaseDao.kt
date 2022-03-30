@@ -43,5 +43,5 @@ interface SleepDatabaseDao {
     // No need suspend keyword here because Room already uses a background thread
     // for that specific @Query which returns LiveData.
     @Query("SELECT * FROM daily_sleep_quality_table ORDER BY nightId DESC")
-    fun getAllNights(): LiveData<SleepNight>
+    fun getAllNights(): LiveData<List<SleepNight>>
 }

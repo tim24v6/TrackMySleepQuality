@@ -19,49 +19,58 @@ package com.example.android.trackmysleepquality.sleeptracker
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import com.example.android.trackmysleepquality.database.SleepDatabaseDao
 import com.example.android.trackmysleepquality.database.SleepNight
+import com.example.android.trackmysleepquality.formatNights
 import kotlinx.coroutines.launch
 
 /**
  * ViewModel for SleepTrackerFragment.
  */
 class SleepTrackerViewModel(
-        val database: SleepDatabaseDao,
-        application: Application) : AndroidViewModel(application) {
+    val database: SleepDatabaseDao,
+    application: Application
+) : AndroidViewModel(application) {
 
-        private var tonight = MutableLiveData<SleepNight?>()
+    private var tonight = MutableLiveData<SleepNight?>()
 
-        init {
-                initializeTonight()
+    init {
+        initializeTonight()
+    }
+
+    private fun initializeTonight() {
+        viewModelScope.launch {
+            tonight.value = getTonightFromDatabase()
         }
+    }
 
-        private fun initializeTonight() {
-                viewModelScope.launch {
-                        tonight.value = getTonightFromDatabase()
-
-                }
+    private suspend fun getTonightFromDatabase(): SleepNight? {
+        //jo ni ponimaju etowo
+        var night = database.getTonight()
+        if (night?.endTimeMilli != night?.startTimeMilli) {
+            night == null
         }
-
-        private suspend fun getTonightFromDatabase(): SleepNight? {
-                //jo ni ponimaju etowo
-                var night = database.getTonight()
-                if (night?.endTimeMilli != night?.startTimeMilli) {
-                        night == null
-                }
-                return night
-        }
+        return night
+    }
 
         fun onStartTracking() {
-                viewModelScope.launch {
-                        val newNight = SleepNight()
-                        insert(newNight)
-                        tonight.value = getTonightFromDatabase()
-                }
+            viewModelScope.launch {
+                val newNight = SleepNight()
+                insert(newNight)
+                tonight.value = getTonightFromDatabase()
+            }
         }
 
-        private suspend fun insert(night: SleepNight) {
-                database.insert(night)
-        }
+    private suspend fun insert(night: SleepNight) {
+        database.insert(night)
+    }
+
+    private val nights = database.getAllNights()
+
+    val nightsString = Transformations.map(nights) { nights ->
+        formatNights(nights, application.resources)
+    }
+
 }
