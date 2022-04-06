@@ -19,7 +19,6 @@ package com.example.android.trackmysleepquality
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 
-
 /**
  * This is the toy app for lesson 6 of the
  * Android App Development in Kotlin course on Udacity(https://www.udacity.com/course/???).
@@ -42,6 +41,10 @@ import androidx.appcompat.app.AppCompatActivity
  * This main activity is just a container for our fragments,
  * where the real action is.
  */
+// this is TrackMySleepQuality app:
+// https://developer.android.com/codelabs/kotlin-android-training-coroutines-and-room#10
+// and next lesson (Use LiveData to control button states):
+// https://developer.android.com/codelabs/kotlin-android-training-quality-and-states#0
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
