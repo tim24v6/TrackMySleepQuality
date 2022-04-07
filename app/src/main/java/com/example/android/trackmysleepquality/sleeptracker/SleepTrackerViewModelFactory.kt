@@ -38,4 +38,3 @@ class SleepTrackerViewModelFactory(
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
-

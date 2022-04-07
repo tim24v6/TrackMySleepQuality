@@ -34,7 +34,6 @@ import com.example.android.trackmysleepquality.databinding.FragmentSleepTrackerB
  * a database. Cumulative data is displayed in a simple scrollable TextView.
  * (Because we have not learned about RecyclerView yet.)
  */
-// DANGER!! this in 68 ********************************************************
 class SleepTrackerFragment : Fragment() {
 
     /**
