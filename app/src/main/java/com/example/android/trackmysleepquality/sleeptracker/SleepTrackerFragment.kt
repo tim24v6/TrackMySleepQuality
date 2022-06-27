@@ -26,6 +26,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.android.trackmysleepquality.R
+import com.example.android.trackmysleepquality.SleepNightAdapter
 import com.example.android.trackmysleepquality.database.SleepDatabase
 import com.example.android.trackmysleepquality.databinding.FragmentSleepTrackerBinding
 
@@ -63,13 +64,21 @@ class SleepTrackerFragment : Fragment() {
         val sleepTrackerViewModel = ViewModelProvider(this, viewModelFactory)
             .get(SleepTrackerViewModel::class.java)
 
+
+        val adapter = SleepNightAdapter()
+        sleepTrackerViewModel.nights.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                adapter.data = it
+            }
+        })
+
         binding.sleepTrackerViewModel = sleepTrackerViewModel
 
         // Set the current activity as the lifecycle owner of the binding.
 //        binding.setLifecycleOwner(this) //it makes a bug
         binding.lifecycleOwner = viewLifecycleOwner
 
-        sleepTrackerViewModel.navigateToSleepQuality.observe(viewLifecycleOwner, Observer { night ->
+        sleepTrackerViewModel.navigateToSleepQuality.observe(viewLifecycleOwner) { night ->
             night?.let {
                 this.findNavController().navigate(
                     SleepTrackerFragmentDirections
@@ -77,7 +86,8 @@ class SleepTrackerFragment : Fragment() {
                 )
                 sleepTrackerViewModel.doneNavigation()
             }
-        })
+        }
+
         return binding.root
     }
 }
